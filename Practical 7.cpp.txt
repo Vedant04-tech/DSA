@@ -1,0 +1,72 @@
+#include <iostream>
+#include <unordered_map>
+#include <list>
+#include <queue>
+using namespace std;
+
+class FlightGraph {
+    unordered_map<string, list<pair<string, int>>> adjList;
+
+public:
+    void addFlight(string from, string to, int cost) {
+        adjList[from].push_back({to, cost});
+        adjList[to].push_back({from, cost}); // bidirectional
+    }
+
+    void displayFlights() {
+        for (auto& city : adjList) {
+            cout << city.first << " -> ";
+            for (auto& edge : city.second)
+                cout << edge.first << "(" << edge.second << ") ";
+            cout << endl;
+        }
+    }
+
+    bool isConnected() {
+        if (adjList.empty()) return false;
+        unordered_map<string, bool> visited;
+        queue<string> q;
+
+        string start = adjList.begin()->first;
+        q.push(start);
+        visited[start] = true;
+
+        while (!q.empty()) {
+            string curr = q.front(); q.pop();
+            for (auto& neighbor : adjList[curr]) {
+                if (!visited[neighbor.first]) {
+                    visited[neighbor.first] = true;
+                    q.push(neighbor.first);
+                }
+            }
+        }
+
+        for (auto& city : adjList)
+            if (!visited[city.first]) return false;
+        return true;
+    }
+};
+
+int main() {
+    FlightGraph g;
+    int n;
+    cout << "Enter number of flights: ";
+    cin >> n;
+
+    cout << "Enter flights (city1 city2 cost):\n";
+    for (int i = 0; i < n; i++) {
+        string a, b;
+        int cost;
+        cin >> a >> b >> cost;
+        g.addFlight(a, b, cost);
+    }
+
+    g.displayFlights();
+
+    if (g.isConnected())
+        cout << "\nGraph is CONNECTED.\n";
+    else
+        cout << "\nGraph is NOT CONNECTED.\n";
+
+    return 0;
+}

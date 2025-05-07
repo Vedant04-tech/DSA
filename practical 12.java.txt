@@ -1,0 +1,75 @@
+import java.io.*;
+import java.util.*;
+
+class Student {
+    String roll, name, div, addr;
+    Student(String r, String n, String d, String a) {
+        roll = r; name = n; div = d; addr = a;
+    }
+    void save(PrintWriter out) {
+        out.println(roll + "," + name + "," + div + "," + addr);
+    }
+    static Student fromLine(String line) {
+        String[] p = line.split(",");
+        return p.length == 4 ? new Student(p[0], p[1], p[2], p[3]) : null;
+    }
+    void display() {
+        System.out.println("Roll: " + roll + "\nName: " + name + "\nDiv: " + div + "\nAddress: " + addr);
+    }
+}
+
+public class StudentSystem {
+    static final String FILE = "students.txt";
+    static Scanner sc = new Scanner(System.in);
+
+    static void add() throws IOException {
+        System.out.print("Roll: "); String r = sc.nextLine();
+        System.out.print("Name: "); String n = sc.nextLine();
+        System.out.print("Div: "); String d = sc.nextLine();
+        System.out.print("Address: "); String a = sc.nextLine();
+        new Student(r, n, d, a).save(new PrintWriter(new FileWriter(FILE, true), true));
+        System.out.println("Student Added.");
+    }
+
+    static void search() throws IOException {
+        System.out.print("Enter Roll: "); String r = sc.nextLine();
+        BufferedReader br = new BufferedReader(new FileReader(FILE));
+        String line; boolean found = false;
+        while ((line = br.readLine()) != null) {
+            Student s = Student.fromLine(line);
+            if (s != null && s.roll.equals(r)) {
+                s.display(); found = true; break;
+            }
+        }
+        br.close();
+        if (!found) System.out.println("Student not found.");
+    }
+
+    static void delete() throws IOException {
+        System.out.print("Enter Roll to Delete: "); String r = sc.nextLine();
+        File f1 = new File(FILE), temp = new File("temp.txt");
+        BufferedReader br = new BufferedReader(new FileReader(f1));
+        PrintWriter pw = new PrintWriter(temp);
+        String line; boolean deleted = false;
+        while ((line = br.readLine()) != null) {
+            Student s = Student.fromLine(line);
+            if (s != null && s.roll.equals(r)) { deleted = true; continue; }
+            pw.println(line);
+        }
+        br.close(); pw.close();
+        f1.delete(); temp.renameTo(f1);
+        System.out.println(deleted ? "Deleted." : "Not Found.");
+    }
+
+    public static void main(String[] args) throws IOException {
+        while (true) {
+            System.out.println("\n1.Add 2.Search 3.Delete 4.Exit\nEnter choice: ");
+            int ch = Integer.parseInt(sc.nextLine());
+            if (ch == 1) add();
+            else if (ch == 2) search();
+            else if (ch == 3) delete();
+            else if (ch == 4) break;
+            else System.out.println("Invalid choice.");
+        }
+    }
+}

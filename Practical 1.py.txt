@@ -1,0 +1,63 @@
+def linear_probing(table, size, key):
+    for i in range(size):
+        idx = (key % size + i) % size
+        if table[idx] == -1:
+            table[idx] = key
+            return
+    print("Table Full")
+
+def quadratic_probing(table, size, key):
+    for i in range(size):
+        idx = (key % size + i*i) % size
+        if table[idx] == -1:
+            table[idx] = key
+            return
+    print("Table Full")
+
+def search(table, size, key):
+    for i in range(size):
+        idx = (key % size + i) % size
+        if table[idx] == key:
+            print(f"Found at index {idx} in {i+1} comparisons")
+            return
+        if table[idx] == -1:
+            break
+    print("Not found")
+
+def is_valid(key):
+    return len(str(key)) == 10
+
+def main():
+    table = []
+    while True:
+        print("\n1. Linear Probing\n2. Quadratic Probing\n3. Search\n4. Exit")
+        ch = int(input("Choice: "))
+        if ch == 1 or ch == 2:
+            size = int(input("Table size: "))
+            table = [-1] * size
+            for _ in range(size):
+                key = int(input("Enter 10-digit number: "))
+                if is_valid(key):
+                    if ch == 1:
+                        linear_probing(table, size, key)
+                    else:
+                        quadratic_probing(table, size, key)
+                else:
+                    print("Invalid number")
+            print("Table:", table)
+        elif ch == 3:
+            if table:
+                key = int(input("Number to search: "))
+                if is_valid(key):
+                    search(table, len(table), key)
+                else:
+                    print("Invalid number")
+            else:
+                print("Table is empty")
+        elif ch == 4:
+            break
+        else:
+            print("Invalid choice")
+
+main()
+
