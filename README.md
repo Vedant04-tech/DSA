@@ -71,3 +71,15 @@ This is an ongoing learning repository. I plan to keep adding solutions, revisit
 ---
 
 *Practise consistently. Understand the pattern. Improve one solution at a time.*
+
+<!---LeetCode Topics Start-->
+# LeetCode Topics
+## Array
+|  |
+| ------- |
+| [0027-remove-element](https://github.com/Vedant04-tech/DSA/tree/master/0027-remove-element) |
+## Two Pointers
+|  |
+| ------- |
+| [0027-remove-element](https://github.com/Vedant04-tech/DSA/tree/master/0027-remove-element) |
+<!---LeetCode Topics End-->
